@@ -7,6 +7,7 @@ from pytz import timezone
 from match import Match
 from result import Result
 from team import Team
+from typing import List
 
 TIME_FORMAT = "%Y-%m-%d"
 TODAY = datetime.now(timezone("UTC")).strftime(TIME_FORMAT)
@@ -19,14 +20,14 @@ class DailyUpdate():
       data: League of Legends Esports results for the given date.
       teams: List of teams that played today. 
   """
-  def __init__(self):
+  def __init__(self) -> None:
     """Initializes the instance by collecting result of matches for current day.
     
     """
     self.data = self.get_data()
     self.teams = {}
 
-  def get_data(self, date = TODAY):
+  def get_data(self, date: str = TODAY) -> List[Match]:
     """Pull data from leaguepedia.
 
     Pulls esports result from leaguepedia and process into Match objects. 
@@ -35,10 +36,11 @@ class DailyUpdate():
 
 
     Args:
-      date: date and time in UTC, conforming to TIME_FORMAT.
+      date: date and time in UTC as string, 
+            conforming to TIME_FORMAT --> [%Y-%m-%d].
 
     Returns:
-      data>: A list of Matches for the given date. (default = today) 
+      data: A list of Matches for the given date. (default = today) 
 
     """
     data = []
@@ -50,10 +52,9 @@ class DailyUpdate():
       limit = "max",
       tables = "ScoreboardGames=SG",
       fields = "SG.Tournament, SG.DateTime_UTC, SG.Team1, SG.Team2, \
-                WinTeam, Tournament",
+          WinTeam, Tournament",
       where = f"SG.DateTime_UTC >= '{date}'"
     )["cargoquery"]
-
 
     for match in matches:
       match_detail = match["title"]
@@ -103,7 +104,7 @@ class DailyUpdate():
       self.teams[team_1_name].add_game(team_1_result)
       self.teams[team_2_name].add_game(team_2_result)
 
-  def __str__(self):
+  def __str__(self) -> str:
     """A string representation of matches happening today.
 
       For example:
@@ -141,4 +142,3 @@ class DailyUpdate():
             seen.add(opponent)
 
     return output
-  

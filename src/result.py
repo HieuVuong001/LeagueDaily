@@ -9,7 +9,7 @@ class Result():
     score: our record against them.
 
   """
-  def __init__(self, opponent, score):
+  def __init__(self, opponent: str, score: int) -> None:
     """Initializes the Result given 
     opponent's name and score against them.
 
@@ -17,7 +17,7 @@ class Result():
     self.opponent = opponent
     self.score = score
 
-  def __str__(self):
+  def __str__(self) -> str:
     """A string representation of the result.
 
     """

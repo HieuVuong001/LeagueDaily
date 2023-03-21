@@ -1,6 +1,9 @@
 """
   Add games to team history and get record against opponent team.
 """
+
+from result import Result
+
 class Team():
   """Add games to team's history and get record against other teams.
 
@@ -10,7 +13,9 @@ class Team():
     league: The league that this team belongs to.
 
   """
-  def __init__(self, team_name, league, history):
+  def __init__(self, team_name: str,
+              league: str,
+              history: dict[str, Result]) -> None:
     """Initializes the Result given 
     opponent's name and score against them.
     
@@ -19,7 +24,7 @@ class Team():
     self.history = history
     self.league = league
 
-  def add_game(self, game):
+  def add_game(self, game: Result):
     """Add game to team's history.
 
     If the opponent we've already faced -> add to current 
@@ -33,13 +38,13 @@ class Team():
     """
     # Add the game and its score.
     # Destructure the result
-    if game.opponent in self.games:
+    if game.opponent in self.history:
     # increase the score if we win
-      self.games[game.opponent] += game.result
+      self.history[game.opponent] += game.score
     else:
-      self.games[game.opponent] = game.result
+      self.history[game.opponent] = game.score
 
-  def get_score_against(self, opponent):
+  def get_score_against(self, opponent: str) -> None:
     """Get the score against opponent team.
 
       Get the score against opponent by looking up the team's history.
@@ -53,7 +58,7 @@ class Team():
     """
     return self.history[opponent]
 
-  def __str__(self):
+  def __str__(self) -> str:
     """A string representation of the result.
 
     """
