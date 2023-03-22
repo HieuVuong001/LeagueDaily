@@ -26,6 +26,8 @@ class DailyUpdate():
     """
     self.data = self.get_data()
     self.teams = {}
+    self.organize()
+
 
   def get_data(self, date: str = TODAY) -> List[Match]:
     """Pull data from leaguepedia.
@@ -104,7 +106,7 @@ class DailyUpdate():
       self.teams[team_1_name].add_game(team_1_result)
       self.teams[team_2_name].add_game(team_2_result)
 
-  def __str__(self) -> str:
+  def get_all_output(self) -> str:
     """A string representation of matches happening today.
 
       For example:
@@ -142,3 +144,14 @@ class DailyUpdate():
             seen.add(opponent)
 
     return output
+
+  def __str__(self) -> str:
+    """
+    Output total matches happening today.
+
+    Returns
+      String output of total games happening today.
+    """
+
+    return f"Data collected. There are {len(self.teams)} teams playing today."
+  
