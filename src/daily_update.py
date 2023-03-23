@@ -8,7 +8,7 @@ from pytz import timezone
 from match import Match
 from result import Result
 from team import Team
-from typing import List
+from typing import Dict, List, Tuple
 
 TIME_FORMAT = "%Y-%m-%d"
 TODAY = datetime.now(timezone("UTC"))
@@ -146,16 +146,17 @@ class DailyUpdate():
 
     return output
 
-  def get_output_list(self) -> List[str]:
-    """A list of string representation of matches.
+  def get_output_list(self) -> Dict[str, List[Tuple]]:
+    """Returns a dict of league and match info.
 
-      For example:
-        | Worlds 2022 | GAM 1 0 TES
-        | Worlds 2022 | GAM 0 1 TES
-      into a list
+    A dictionary with league name as key,
+    and tuples of info as value.
+    
+    Sample tuple format:
+      (team_name, home_score, opponent_score, opponent)
 
       Returns:
-        res: List[str]
+        List[Tuple] 
     """
     # Mark off team that we have seen
     # Team A vs Team B --> when fetching result for team A
@@ -171,8 +172,6 @@ class DailyUpdate():
 
         # Loop thru game history and append result to output
         for opponent in team.history:
-          output = ""
-
           if opponent not in seen:
             # Breaking into different parts for readability
             league_name = team.league
@@ -183,14 +182,9 @@ class DailyUpdate():
             if league_name not in leagues:
               leagues[league_name] = [] # list of empty output
 
-            output += (
-            f"""
-            | {league_name} |
-            {team_name} {home_score} :{opponent_score} {opponent}\n
-            """)
+            output = (team_name, home_score, opponent_score, opponent)
 
             leagues[league_name].append(output)
-
 
             # Mark as seen
             seen.add(opponent)

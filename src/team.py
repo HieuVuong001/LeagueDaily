@@ -16,8 +16,9 @@ class Team():
   def __init__(self, team_name: str,
               league: str,
               history: dict[str, Result]) -> None:
-    """Initializes the Result given 
-    opponent's name and score against them.
+    """Initializes the Team object given 
+    the league it belongs to,
+    and its scores against other teams.
     
     """
     self.team_name = team_name
@@ -57,6 +58,7 @@ class Team():
         and our result against them.
     """
     return self.history[opponent]
+
 
   def __str__(self) -> str:
     """A string representation of the result.
