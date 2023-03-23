@@ -11,8 +11,10 @@ from team import Team
 from typing import Dict, List, Tuple
 
 TIME_FORMAT = "%Y-%m-%d"
-TODAY = datetime.now(timezone("UTC"))
-DATE =  (TODAY - dt.timedelta(days=1)).strftime(TIME_FORMAT)
+TODAY_UTC = datetime.now(timezone("UTC"))
+TODAY = TODAY_UTC.strftime(TIME_FORMAT)
+DATE =  (TODAY_UTC - dt.timedelta(days=1)).strftime(TIME_FORMAT)
+
 class DailyUpdate():
   """
   Pull data, create teams and assign matches accordingly.
@@ -21,26 +23,23 @@ class DailyUpdate():
       data: League of Legends Esports results for the given date.
       teams: List of teams that played today. 
   """
-  def __init__(self) -> None:
+  def __init__(self, date: str = DATE) -> None:
     """Initializes the instance by collecting result of matches for current day.
     
     """
+    print(date)
+    self.current_date = date
     self.data = self.get_data()
     self.teams = {}
     self.organize()
 
 
-  def get_data(self, date: str = DATE) -> List[Match]:
+  def get_data(self) -> List[Match]:
     """Pull data from leaguepedia.
 
     Pulls esports result from leaguepedia and process into Match objects. 
     Matches contain team names, date and time of match, 
     the tournament it belongs, and match result.
-
-
-    Args:
-      date: date and time in UTC as string, 
-            conforming to TIME_FORMAT --> [%Y-%m-%d].
 
     Returns:
       data: A list of Matches for the given date. (default = today) 
@@ -56,7 +55,7 @@ class DailyUpdate():
       tables = "ScoreboardGames=SG",
       fields = "SG.Tournament, SG.DateTime_UTC, SG.Team1, SG.Team2, \
           WinTeam, Tournament",
-      where = f"SG.DateTime_UTC >= '{date}'"
+      where = f"SG.DateTime_UTC >= '{self.current_date} 00:00:00'"
     )["cargoquery"]
 
     for match in matches:
