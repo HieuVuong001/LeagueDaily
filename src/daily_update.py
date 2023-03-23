@@ -2,6 +2,7 @@
 Get matches results from leaguepedia.com and bracket them.
 """
 from datetime import datetime
+import datetime as dt
 import mwclient
 from pytz import timezone
 from match import Match
@@ -10,8 +11,8 @@ from team import Team
 from typing import List
 
 TIME_FORMAT = "%Y-%m-%d"
-TODAY = datetime.now(timezone("UTC")).strftime(TIME_FORMAT)
-
+TODAY = datetime.now(timezone("UTC"))
+DATE =  (TODAY - dt.timedelta(days=1)).strftime(TIME_FORMAT)
 class DailyUpdate():
   """
   Pull data, create teams and assign matches accordingly.
@@ -29,7 +30,7 @@ class DailyUpdate():
     self.organize()
 
 
-  def get_data(self, date: str = TODAY) -> List[Match]:
+  def get_data(self, date: str = DATE) -> List[Match]:
     """Pull data from leaguepedia.
 
     Pulls esports result from leaguepedia and process into Match objects. 
@@ -144,6 +145,57 @@ class DailyUpdate():
             seen.add(opponent)
 
     return output
+
+  def get_output_list(self) -> List[str]:
+    """A list of string representation of matches.
+
+      For example:
+        | Worlds 2022 | GAM 1 0 TES
+        | Worlds 2022 | GAM 0 1 TES
+      into a list
+
+      Returns:
+        res: List[str]
+    """
+    # Mark off team that we have seen
+    # Team A vs Team B --> when fetching result for team A
+    # --> we also fetch result for team B
+    seen = set()
+
+    leagues = {}
+
+    for team_name, team in self.teams.items():
+      if team_name not in seen:
+        # Mark as seen
+        seen.add(team_name)
+
+        # Loop thru game history and append result to output
+        for opponent in team.history:
+          output = ""
+
+          if opponent not in seen:
+            # Breaking into different parts for readability
+            league_name = team.league
+            home_score = team.get_score_against(opponent)
+            opponent_score = self.teams[opponent]\
+                            .get_score_against(team_name)
+
+            if league_name not in leagues:
+              leagues[league_name] = [] # list of empty output
+
+            output += (
+            f"""
+            | {league_name} |
+            {team_name} {home_score} :{opponent_score} {opponent}\n
+            """)
+
+            leagues[league_name].append(output)
+
+
+            # Mark as seen
+            seen.add(opponent)
+
+    return leagues
 
   def __str__(self) -> str:
     """
