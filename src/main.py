@@ -3,12 +3,12 @@ Typer wrapper.
 """
 
 import typer
-from daily_update import TODAY, TODAY_UTC
+from daily_update import TODAY, TODAY_UTC, DATE
 from display import Display
 
 def main(
     since: str = typer.Argument(
-      TODAY, help="Get result since this given [Year-Month-Day].",
+      DATE, help="Get result since this given [Year-Month-Day].",
       ),
     ):
   """
