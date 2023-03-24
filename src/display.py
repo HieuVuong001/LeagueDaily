@@ -2,29 +2,28 @@
 Display output to the terminal using data from DailyUpdate.
 """
 
+from typing import Dict, List, Tuple
 from rich.console import Console
 from rich.table import Table
-from daily_update import DailyUpdate
 
 class Display():
   """
     A wrapper class to display information from DailyUpdate
   """
-  def __init__(self, date: str):
+  def __init__(self):
     self.data = None
     self.tables = None
     self.console = Console()
-    self.date = date
     self.warning_message = (
     """
     [bold red]
     There is a 500 results per query limit from the API
     The result might be truncated.
-    [/bold red])
+    [/bold red]
     """
     )
 
-  def get_data(self) -> None:
+  def process_data(self, data: Dict[str, List[Tuple]]) -> None:
     """ Get data from Leaguepedia.
 
     Initiate the data collecting process.
@@ -32,8 +31,9 @@ class Display():
     Data is store in the object.
     
     """
-    self.data = DailyUpdate(self.date)
+    self.data = data
     self.tables = self.setup_tables()
+
 
   def setup_tables(self):
     # List of tables to render
@@ -50,9 +50,7 @@ class Display():
       "League", justify="left", style="bold color(67)"
       )
 
-    leagues = self.data.get_output_list()
-
-    for league, matches_info in leagues.items():
+    for league, matches_info in self.data.items():
       # Store smaller tables for each league
       if league not in tables:
         tables[league] = Table(

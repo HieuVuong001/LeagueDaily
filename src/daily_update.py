@@ -27,7 +27,6 @@ class DailyUpdate():
     """Initializes the instance by collecting result of matches for current day.
     
     """
-    print(date)
     self.current_date = date
     self.data = self.get_data()
     self.teams = {}
@@ -106,6 +105,7 @@ class DailyUpdate():
       self.teams[team_1_name].add_game(team_1_result)
       self.teams[team_2_name].add_game(team_2_result)
 
+
   def get_all_output(self) -> str:
     """A string representation of matches happening today.
 
@@ -145,7 +145,7 @@ class DailyUpdate():
 
     return output
 
-  def get_output_list(self) -> Dict[str, List[Tuple]]:
+  def get_info(self) -> Dict[str, List[Tuple]]:
     """Returns a dict of league and match info.
 
     A dictionary with league name as key,
