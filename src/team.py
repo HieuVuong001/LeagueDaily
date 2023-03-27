@@ -64,4 +64,4 @@ class Team():
     """A string representation of the result.
 
     """
-    return f"{self.team_name} result is {self.games}"
+    return f"{self.team_name} result is {self.history}"

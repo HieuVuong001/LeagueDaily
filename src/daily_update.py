@@ -54,7 +54,7 @@ class DailyUpdate():
       tables = "ScoreboardGames=SG",
       fields = "SG.Tournament, SG.DateTime_UTC, SG.Team1, SG.Team2, \
           WinTeam, Tournament",
-      where = f"SG.DateTime_UTC >= '{self.current_date} 00:00:00'"
+      where = f"SG.DateTime_UTC >= '{self.current_date}'"
     )["cargoquery"]
 
     for match in matches:
@@ -63,7 +63,7 @@ class DailyUpdate():
       team2 = match_detail["Team2"]
       league = match_detail["Tournament"]
       result = match_detail["WinTeam"]
-
+      
       data.append(Match(team1, team2, result, league))
 
     return data
