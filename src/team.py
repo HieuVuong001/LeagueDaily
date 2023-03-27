@@ -2,7 +2,7 @@
   Add games to team history and get record against opponent team.
 """
 
-from result import Result
+from src.result import Result
 
 class Team():
   """Add games to team's history and get record against other teams.

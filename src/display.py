@@ -14,14 +14,7 @@ class Display():
     self.data = None
     self.tables = None
     self.console = Console()
-    self.warning_message = (
-    """
-    [bold red]
-    There is a 500 results per query limit from the API
-    The result might be truncated.
-    [/bold red]
-    """
-    )
+
 
   def process_data(self, data: Dict[str, List[Tuple]]) -> None:
     """ Get data from Leaguepedia.
@@ -74,8 +67,15 @@ class Display():
   def warn(self, message: str) -> None:
     self.console.print(f"[bold red]{message}[/bold red]")
 
+  def maximum_output_warning(self) -> str:
+    return (
+    """
+    [bold red]
+    There is a 500 results per query limit from the API
+    The result might be truncated.
+    [/bold red]
+    """
+    )
+
   def show_master_table(self):
     self.console.print(self.tables["master"])
-
-  def show_limit_warning(self):
-    self.console.print(self.warning_message)

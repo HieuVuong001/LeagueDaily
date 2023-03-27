@@ -5,9 +5,9 @@ from datetime import datetime
 import datetime as dt
 import mwclient
 from pytz import timezone
-from match import Match
-from result import Result
-from team import Team
+from src.match import Match
+from src.result import Result
+from src.team import Team
 from typing import Dict, List, Tuple
 
 TIME_FORMAT = "%Y-%m-%d"

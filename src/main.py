@@ -3,9 +3,17 @@ Typer wrapper.
 """
 
 import typer
-from daily_update import TODAY_UTC, DATE, DailyUpdate
-from display import Display
+from src.daily_update import DATE, DailyUpdate
+from src.display import Display
+from datetime import datetime
+from pytz import timezone
+from tzlocal import get_localzone
+from zoneinfo import ZoneInfo
 
+app = typer.Typer()
+
+
+@app.command()
 def main(
     since: str = typer.Argument(
       DATE, help="Get result since this given [Year-Month-Day].",
@@ -38,12 +46,23 @@ def main(
   else:
     # Parse the date, if it's not valid then just terminate
     # Year - Month - Date
-    date_comp = since.split("-")
-    year = TODAY_UTC.strftime("%Y")
+    local_tz = str(get_localzone())
+    parsed_date = since.split("-")
 
-    if date_comp[0] != year:
-      display.warn("Not supported due to API quota. Terminating")
-      raise typer.Abort()
+    given = datetime(
+      int(parsed_date[0]),
+      int(parsed_date[1]),
+      int(parsed_date[2]),
+      tzinfo=ZoneInfo(local_tz)
+    )
+
+    given_utc = given.astimezone(ZoneInfo("UTC"))
+    current_utc = datetime.now(timezone("UTC"))
+
+    if given_utc > current_utc:
+      # given date is in the future
+      display.warn("Invalid date! Abort!")
+      raise typer.Exit(1)
     else:
       # warn the user that 500 query is the limit
       # execute as normal
@@ -54,7 +73,8 @@ def main(
       display.process_data(daily_update.get_info())
 
       display.show_master_table()
-      display.show_limit_warning()
+      display.warn(display.maximum_output_warning())
+
 
 if __name__ == "__main__":
-  typer.run(main)
+  app()
