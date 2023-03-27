@@ -5,10 +5,13 @@ Typer wrapper.
 import typer
 from src.daily_update import DATE, DailyUpdate
 from src.display import Display
+from src.util import *
 from datetime import datetime
 from pytz import timezone
 from tzlocal import get_localzone
 from zoneinfo import ZoneInfo
+from typing import Optional, List
+
 
 app = typer.Typer()
 
@@ -18,6 +21,7 @@ def main(
     since: str = typer.Argument(
       DATE, help="Get result since this given [Year-Month-Day].",
       ),
+    league: Optional[List[str]] = typer.Option(None),
     ):
   """
   Output table of game results.
@@ -33,11 +37,13 @@ def main(
   """
   # Initiate objects to pull and display information
   display = Display()
-  daily_update = DailyUpdate(since)
+  daily_update = DailyUpdate()
+
+  general_query = generate_general_query(since)
 
   if since == DATE:
     # Pull data and process
-    daily_update.get_data()
+    daily_update.get_data(general_query)
     display.process_data(daily_update.get_info())
 
     # Display table
@@ -64,7 +70,7 @@ def main(
       raise typer.Exit(1)
     else:
       # Pull and process data
-      daily_update.get_data()
+      daily_update.get_data(general_query)
       display.process_data(daily_update.get_info())
 
       # Display table and warning

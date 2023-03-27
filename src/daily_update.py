@@ -10,6 +10,7 @@ from src.result import Result
 from src.team import Team
 from typing import Dict, List, Tuple
 
+
 TIME_FORMAT = "%Y-%m-%d"
 TODAY_UTC = datetime.now(timezone("UTC"))
 TODAY = TODAY_UTC.strftime(TIME_FORMAT)
@@ -28,12 +29,9 @@ class DailyUpdate():
     
     """
     self.current_date = date
-    self.data = self.get_data()
     self.teams = {}
-    self.organize()
 
-
-  def get_data(self) -> List[Match]:
+  def get_data(self, query: str) -> List[Match]:
     """Pull data from leaguepedia.
 
     Pulls esports result from leaguepedia and process into Match objects. 
@@ -54,7 +52,7 @@ class DailyUpdate():
       tables = "ScoreboardGames=SG",
       fields = "SG.Tournament, SG.DateTime_UTC, SG.Team1, SG.Team2, \
           WinTeam, Tournament",
-      where = f"SG.DateTime_UTC >= '{self.current_date}'"
+      where = query
     )["cargoquery"]
 
     for match in matches:
@@ -63,12 +61,12 @@ class DailyUpdate():
       team2 = match_detail["Team2"]
       league = match_detail["Tournament"]
       result = match_detail["WinTeam"]
-      
+
       data.append(Match(team1, team2, result, league))
 
-    return data
+    self.organize(data)
 
-  def organize(self) -> None:
+  def organize(self, data: List[Match]) -> None:
     """ Organize the data into usable dictionary.
 
     Organize the collected data into a dictionary team by team.
@@ -80,7 +78,7 @@ class DailyUpdate():
     Result has two attributes: opposition team, and our result against them. 
 
     """
-    for match in self.data:
+    for match in data:
       team_1_name = match.team_1
       team_2_name = match.team_2
       res = match.result
