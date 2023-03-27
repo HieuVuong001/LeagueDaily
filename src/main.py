@@ -31,24 +31,21 @@ def main(
     since: A string in format Y-M-D
 
   """
+  # Initiate objects to pull and display information
   display = Display()
   daily_update = DailyUpdate(since)
 
   if since == DATE:
-    # Pull data
+    # Pull data and process
     daily_update.get_data()
-
-    # Feed data to display
     display.process_data(daily_update.get_info())
 
-    # Display
+    # Display table
     display.show_master_table()
   else:
-    # Parse the date, if it's not valid then just terminate
-    # Year - Month - Date
+    # Parse input date into datetime object
     local_tz = str(get_localzone())
     parsed_date = since.split("-")
-
     given = datetime(
       int(parsed_date[0]),
       int(parsed_date[1]),
@@ -56,22 +53,21 @@ def main(
       tzinfo=ZoneInfo(local_tz)
     )
 
+    # Convert timezone to UTC and get current time
     given_utc = given.astimezone(ZoneInfo("UTC"))
     current_utc = datetime.now(timezone("UTC"))
 
+    # if given time > current time then abort
+    # else execute, but show output limit warning
     if given_utc > current_utc:
-      # given date is in the future
       display.warn("Invalid date! Abort!")
       raise typer.Exit(1)
     else:
-      # warn the user that 500 query is the limit
-      # execute as normal
-       # Pull data
+      # Pull and process data
       daily_update.get_data()
-
-      # Feed data to display
       display.process_data(daily_update.get_info())
 
+      # Display table and warning
       display.show_master_table()
       display.warn(display.maximum_output_warning())
 

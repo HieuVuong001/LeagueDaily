@@ -23,10 +23,25 @@ def slow_down_tests():
   time.sleep(1.2)
 
 class TestDate():
-  """ Various tests with date input for the CLI app.
+  """Various tests with date input for the CLI app.
+
+  Test for a day that is today, in the future,
+  1 day before today and 2 days before today.
   """
+  def test_today(self):
+    """Test a date in the future
+
+    App should not run because there is no result.
+    """
+    today = datetime.now(timezone("UTC"))
+    today_str = today.strftime(TIME_FORMAT)
+
+    result = runner.invoke(app, today_str)
+    assert result.exit_code == 0
+    assert "limit query" not in result.stdout
+
   def test_next_week(self):
-    """ Test a date in the future
+    """Test a date in the future
 
     App should not run because there is no result.
     """
@@ -52,7 +67,6 @@ class TestDate():
     """Test yesterday from today.
 
     Since this is the default date, app should run normally.
-
     """
     yesterday = datetime.now(timezone("UTC")) - dt.timedelta(days=1)
     yesterday_str = yesterday.strftime(TIME_FORMAT)
