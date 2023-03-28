@@ -43,6 +43,10 @@ class Display():
       "League", justify="left", style="bold color(67)"
       )
 
+    # Mark repeating games
+    seen = set()
+
+
     for league, matches_info in self.data.items():
       # Store smaller tables for each league
       if league not in tables:
@@ -52,15 +56,23 @@ class Display():
         tables[league].add_column("Team 1", justify="left", style="bold red")
         tables[league].add_column("Score", style="bold")
         tables[league].add_column("Team 2", justify="left", style="bold blue")
+        tables[league].add_column("League",
+                                  justify="left",
+                                  style="bold color(67)")
 
       # Loop through list of tuples and unpack, add to table
       for match in matches_info:
         # unpack match, and add to table
-        team_1, score_1, score_2, team_2 = match
-        tables[league].add_row(team_1, f"{score_1} - {score_2}", team_2)
-        tables["master"].add_row(
-          team_1, f"{score_1} - {score_2}", team_2, league
-          )
+        team_1, score_1, score_2, team_2, team_league = match
+        if (team_1, score_1, score_2, team_2) not in seen:
+          tables[league].add_row(
+            team_1, f"{score_1} - {score_2}", team_2, team_league)
+
+          tables["master"].add_row(
+            team_1, f"{score_1} - {score_2}", team_2, team_league
+            )
+          seen.add((team_1, score_1, score_2, team_2))
+          seen.add((team_2, score_2, score_1, team_1))
 
     return tables
 
@@ -79,3 +91,8 @@ class Display():
 
   def show_master_table(self):
     self.console.print(self.tables["master"])
+
+  def show_league_tables(self):
+    for table in self.tables:
+      if table != "master":
+        self.console.print(self.tables[table])

@@ -5,7 +5,10 @@ Typer wrapper.
 import typer
 from src.daily_update import DATE, DailyUpdate
 from src.display import Display
-from src.util import *
+from src.util import (
+  generate_general_query,
+  generate_league_query
+)
 from datetime import datetime
 from pytz import timezone
 from tzlocal import get_localzone
@@ -38,6 +41,16 @@ def main(
   # Initiate objects to pull and display information
   display = Display()
   daily_update = DailyUpdate()
+
+  # if league is provided, only provide result for that league
+  if league:
+    # Get data for that league specifically.
+    league_query = generate_league_query(since, league)
+    daily_update.get_data(league_query)
+    display.process_data(daily_update.get_info())
+
+    display.show_league_tables()
+    raise typer.Exit()
 
   general_query = generate_general_query(since)
 

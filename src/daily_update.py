@@ -96,8 +96,8 @@ class DailyUpdate():
       # Results are relative
       # team 1 wins against team 2, so team 1 gets +1, but team 2 gets 0
       # that's why we need two different Result objects for the same match
-      team_1_result = Result(team_2_name, int(res == team_1_name))
-      team_2_result = Result(team_1_name, int(res == team_2_name))
+      team_1_result = Result(team_2_name, int(res == team_1_name), league)
+      team_2_result = Result(team_1_name, int(res == team_2_name), league)
 
       # Add the relative result to each team history
       self.teams[team_1_name].add_game(team_1_result)
@@ -150,41 +150,31 @@ class DailyUpdate():
     and tuples of info as value.
     
     Sample tuple format:
-      (team_name, home_score, opponent_score, opponent)
+      (team_name, home_score, opponent_score, opponent, enemy_league)
 
       Returns:
         List[Tuple] 
     """
-    # Mark off team that we have seen
-    # Team A vs Team B --> when fetching result for team A
-    # --> we also fetch result for team B
-    seen = set()
-
     leagues = {}
 
     for team_name, team in self.teams.items():
-      if team_name not in seen:
-        # Mark as seen
-        seen.add(team_name)
+      # Loop thru game history and append result to output
+      for enemy_name, enemy_league in team.history:
+        # Breaking into different parts for readability
+        league_name = team.league
+        enemy = self.teams[enemy_name]
 
-        # Loop thru game history and append result to output
-        for opponent in team.history:
-          if opponent not in seen:
-            # Breaking into different parts for readability
-            league_name = team.league
-            home_score = team.get_score_against(opponent)
-            opponent_score = self.teams[opponent]\
-                            .get_score_against(team_name)
+        home_score = team.get_score_against(enemy_name, enemy_league)
 
-            if league_name not in leagues:
-              leagues[league_name] = [] # list of empty output
+        opponent_score = enemy.get_score_against(team_name, enemy_league)
 
-            output = (team_name, home_score, opponent_score, opponent)
+        if league_name not in leagues:
+          leagues[league_name] = [] # list of empty output
 
-            leagues[league_name].append(output)
+        output = (team_name, home_score, \
+                  opponent_score, enemy_name, enemy_league)
 
-            # Mark as seen
-            seen.add(opponent)
+        leagues[league_name].append(output)
 
     return leagues
 
