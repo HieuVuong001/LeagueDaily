@@ -29,16 +29,16 @@ class TestDate():
   1 day before today and 2 days before today.
   """
   def test_today(self):
-    """Test a date in the future
+    """Test today as input
 
-    App should not run because there is no result.
+    App should run normally.
     """
     today = datetime.now(timezone("UTC"))
     today_str = today.strftime(TIME_FORMAT)
 
     result = runner.invoke(app, today_str)
     assert result.exit_code == 0
-    assert "limit query" not in result.stdout
+    assert "query limit" in result.stdout
 
   def test_next_week(self):
     """Test a date in the future
@@ -73,4 +73,25 @@ class TestDate():
 
     result = runner.invoke(app, yesterday_str)
     assert result.exit_code == 0
-    assert "query limit" not in result.stdout
+    assert "query limit" in result.stdout
+
+  def test_wrong_date_format(self):
+    """Test string as date.
+
+    """
+    d = "Hello"
+    result = runner.invoke(app, d)
+    assert result.exit_code == 2
+    assert "League Daily" not in result.stdout
+
+class TestInput():
+  def test_valid_league(self):
+    result = runner.invoke(app, ["2023-03-01", "--league", "LCS"])
+    assert "LCS" in result.stdout
+    assert result.exit_code == 0
+    assert "query limit" in result.stdout
+
+  def test_invalid_league(self):
+    result = runner.invoke(app, ["2023-03-01", "--league", "NCS"])
+    assert "League Daily" not in result.stdout
+    assert "No result found!" in result.stdout

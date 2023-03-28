@@ -11,7 +11,6 @@ from src.util import (
 )
 from datetime import datetime
 from pytz import timezone
-from tzlocal import get_localzone
 from zoneinfo import ZoneInfo
 from typing import Optional, List
 
@@ -21,7 +20,7 @@ app = typer.Typer()
 
 @app.command()
 def main(
-    since: str = typer.Argument(
+    since: datetime = typer.Argument(
       DATE, help="Get result since this given [Year-Month-Day].",
       ),
     league: Optional[List[str]] = typer.Option(None),
@@ -47,10 +46,17 @@ def main(
     # Get data for that league specifically.
     league_query = generate_league_query(since, league)
     daily_update.get_data(league_query)
+
+    if not daily_update.get_info():
+      display.warn("No result found!")
+      raise typer.Exit(0)
+
     display.process_data(daily_update.get_info())
 
     display.show_league_tables()
+    display.warn(display.maximum_output_warning())
     raise typer.Exit()
+  
 
   general_query = generate_general_query(since)
 
@@ -61,19 +67,10 @@ def main(
 
     # Display table
     display.show_master_table()
+    display.warn(display.maximum_output_warning())
   else:
-    # Parse input date into datetime object
-    local_tz = str(get_localzone())
-    parsed_date = since.split("-")
-    given = datetime(
-      int(parsed_date[0]),
-      int(parsed_date[1]),
-      int(parsed_date[2]),
-      tzinfo=ZoneInfo(local_tz)
-    )
-
     # Convert timezone to UTC and get current time
-    given_utc = given.astimezone(ZoneInfo("UTC"))
+    given_utc = since.astimezone(ZoneInfo("UTC"))
     current_utc = datetime.now(timezone("UTC"))
 
     # if given time > current time then abort
