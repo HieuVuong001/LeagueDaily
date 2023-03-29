@@ -23,7 +23,10 @@ def main(
     since: datetime = typer.Argument(
       DATE, help="Get result since this given [Year-Month-Day].",
       ),
-    league: Optional[List[str]] = typer.Option(None),
+    league: Optional[List[str]] = typer.Option(
+      None,
+      help="A specific LoL league (LCK, ...)",
+      ),
     ):
   """
   Output table of game results.
@@ -33,8 +36,11 @@ def main(
 
   If date is not provided, show result for the last 24 hours.
 
+  If league is provided, only show output for matches in the given league.
+
   Arguments:
-    since: A string in format Y-M-D
+    since: Datetime in the format Y-M-D
+    league: A league in the LoL tournament system. I.E. LCS, LCK, LPL
 
   """
   # Initiate objects to pull and display information
@@ -55,8 +61,8 @@ def main(
 
     display.show_league_tables()
     display.warn(display.maximum_output_warning())
-    raise typer.Exit()
-  
+    raise typer.Exit(0)
+
 
   general_query = generate_general_query(since)
 
