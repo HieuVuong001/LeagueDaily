@@ -47,7 +47,11 @@ class Team():
       self.history[(game.opponent, game.league, game.match_time)] = game.score
 
 
-  def get_score_against(self, opponent: str, league: str, match_time: str) -> None:
+  def get_score_against(
+      self,
+      opponent: str,
+      league: str,
+      match_time: str) -> None:
     """Get the score against opponent team.
 
       Get the score against opponent by looking up the team's history.

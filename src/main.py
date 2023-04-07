@@ -66,7 +66,7 @@ def main(
 
     display.show_league_tables()
     display.warn(display.maximum_output_warning())
-  
+
   if teams:
     team_query = generate_team_query(since, teams)
     daily_update.get_data(team_query)
@@ -74,9 +74,9 @@ def main(
     if not daily_update.get_info():
       display.warn("No result found!")
       raise typer.Exit(0)
-    
+
     display.process_data(daily_update.get_info())
-    
+
     display.show_league_tables()
     display.warn(display.maximum_output_warning())
 

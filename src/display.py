@@ -73,7 +73,7 @@ class Display():
         team_1, score_1, score_2, team_2, team_league, match_time = match
         if (team_1, score_1, score_2, team_2, match_time) not in seen:
           tables[league].add_row(
-            match_time, team_1, f"{score_1} - {score_2}", 
+            match_time, team_1, f"{score_1} - {score_2}",
                       team_2, team_league)
 
           tables["master"].add_row(

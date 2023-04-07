@@ -98,8 +98,15 @@ class DailyUpdate():
       # Results are relative
       # team 1 wins against team 2, so team 1 gets +1, but team 2 gets 0
       # that's why we need two different Result objects for the same match
-      team_1_result = Result(team_2_name, int(res == team_1_name), league, match_time)
-      team_2_result = Result(team_1_name, int(res == team_2_name), league, match_time)
+      team_1_result = Result(
+        team_2_name,
+        int(res == team_1_name),
+        league, match_time)
+
+      team_2_result = Result(
+        team_1_name,
+        int(res == team_2_name),
+        league, match_time)
 
       # Add the relative result to each team history
       self.teams[team_1_name].add_game(team_1_result)
@@ -165,10 +172,16 @@ class DailyUpdate():
         # Breaking into different parts for readability
         league_name = team.league
         enemy = self.teams[enemy_name]
-        
-        home_score = team.get_score_against(enemy_name, enemy_league, match_time)
 
-        opponent_score = enemy.get_score_against(team_name, enemy_league, match_time)
+        home_score = team.get_score_against(
+          enemy_name,
+          enemy_league,
+          match_time)
+
+        opponent_score = enemy.get_score_against(
+          team_name,
+          enemy_league,
+          match_time)
 
         if league_name not in leagues:
           leagues[league_name] = [] # list of empty output
