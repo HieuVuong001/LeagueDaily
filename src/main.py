@@ -7,7 +7,8 @@ from src.daily_update import DATE, DailyUpdate
 from src.display import Display
 from src.util import (
   generate_general_query,
-  generate_league_query
+  generate_league_query,
+  generate_team_query
 )
 from datetime import datetime
 from pytz import timezone
@@ -27,6 +28,10 @@ def main(
       None,
       help="A specific LoL league (LCK, ...)",
       ),
+    teams: Optional[List[str]] = typer.Option(
+      None,
+      help="A list of teams to show result for."
+    )
     ):
   """
   Output table of game results.
@@ -59,6 +64,20 @@ def main(
 
     display.process_data(daily_update.get_info())
 
+    display.show_league_tables()
+    display.warn(display.maximum_output_warning())
+    raise typer.Exit(0)
+  
+  if teams:
+    team_query = generate_team_query(since, teams)
+    daily_update.get_data(team_query)
+
+    if not daily_update.get_info():
+      display.warn("No result found!")
+      raise typer.Exit(0)
+    
+    display.process_data(daily_update.get_info())
+    
     display.show_league_tables()
     display.warn(display.maximum_output_warning())
     raise typer.Exit(0)

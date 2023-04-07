@@ -61,7 +61,7 @@ class DailyUpdate():
       team2 = match_detail["Team2"]
       league = match_detail["Tournament"]
       result = match_detail["WinTeam"]
-      match_time = match_detail['DateTime UTC'].split(" ")[0]
+      match_time = match_detail["DateTime UTC"].split(" ")[0]
 
       data.append(Match(team1, team2, result, league, match_time))
 
@@ -166,7 +166,6 @@ class DailyUpdate():
         league_name = team.league
         enemy = self.teams[enemy_name]
         
-
         home_score = team.get_score_against(enemy_name, enemy_league, match_time)
 
         opponent_score = enemy.get_score_against(team_name, enemy_league, match_time)

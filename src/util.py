@@ -24,3 +24,21 @@ def generate_league_query(date: str, leagues:List[str]):
 
 def generate_general_query(date: str):
   return f"SG.DateTime_UTC >= '{date}'"
+
+def generate_team_query(date: str, teams: List[str]):
+  if len(teams) == 1:
+    # Only 1 leauge is provided
+    return f"SG.DateTime_UTC >= '{date}' AND (Team1='{teams[0]}' OR Team2='{teams[0]}')"
+  else:
+    # loop thru each league and add to the query
+    teams_info = ""
+    for index, team in enumerate(teams):
+      teams_info += f"Team1='{team}' OR Team2='{team}'"
+      if index != (len(teams) - 1):
+        # if not the last item
+        # add the word or
+        teams_info += " OR "
+
+    base_query = f"SG.DateTime_UTC >= '{date}' AND ({teams_info})"
+
+    return base_query
