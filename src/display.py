@@ -36,6 +36,9 @@ class Display():
     tables["master"] = Table(
       title="[bold color(121)]League Daily[/bold color(121)]"
       )
+    tables["master"].add_column("Date",
+                justify="left",
+                style="bold color(23)")
     tables["master"].add_column("Team 1", justify="left", style="bold red")
     tables["master"].add_column("Score", style="bold")
     tables["master"].add_column("Team 2", justify="left", style="bold blue")
@@ -53,6 +56,9 @@ class Display():
         tables[league] = Table(
           title=f"[bold color(121)]{league}[/bold color(121)]"
           )
+        tables[league].add_column("Date",
+                          justify="left",
+                          style="bold color(23)")
         tables[league].add_column("Team 1", justify="left", style="bold red")
         tables[league].add_column("Score", style="bold")
         tables[league].add_column("Team 2", justify="left", style="bold blue")
@@ -60,19 +66,21 @@ class Display():
                                   justify="left",
                                   style="bold color(67)")
 
+
       # Loop through list of tuples and unpack, add to table
       for match in matches_info:
         # unpack match, and add to table
-        team_1, score_1, score_2, team_2, team_league = match
-        if (team_1, score_1, score_2, team_2) not in seen:
+        team_1, score_1, score_2, team_2, team_league, match_time = match
+        if (team_1, score_1, score_2, team_2, match_time) not in seen:
           tables[league].add_row(
-            team_1, f"{score_1} - {score_2}", team_2, team_league)
+            match_time, team_1, f"{score_1} - {score_2}", 
+                      team_2, team_league)
 
           tables["master"].add_row(
-            team_1, f"{score_1} - {score_2}", team_2, team_league
+            match_time, team_1, f"{score_1} - {score_2}", team_2, team_league
             )
-          seen.add((team_1, score_1, score_2, team_2))
-          seen.add((team_2, score_2, score_1, team_1))
+          seen.add((team_1, score_1, score_2, team_2, match_time))
+          seen.add((team_2, score_2, score_1, team_1, match_time))
 
     return tables
 

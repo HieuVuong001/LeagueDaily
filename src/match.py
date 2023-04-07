@@ -1,6 +1,7 @@
 """
   Blueprint/Intermediate class to store data pulled from API.
 """
+
 class Match():
   """Match class to store data from API.
 
@@ -14,7 +15,8 @@ class Match():
   def __init__(self, team_1: str,
               team_2: str,
               result: str,
-              league: str) -> None:
+              league: str,
+              match_time: str) -> None:
     """Initializes the Match instance given 
     both team's names, result, and league.
 
@@ -23,6 +25,7 @@ class Match():
     self.team_2 = team_2
     self.result = result
     self.league = league
+    self.match_time = match_time
 
   def __str__(self) -> str:
     """A string representation of the result.

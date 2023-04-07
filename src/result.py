@@ -10,7 +10,7 @@ class Result():
     league: the league that opponent belongs to.
 
   """
-  def __init__(self, opponent: str, score: int, league: str) -> None:
+  def __init__(self, opponent: str, score: int, league: str, match_time: str) -> None:
     """Initializes the Result given 
     opponent's name and score against them.
 
@@ -18,6 +18,7 @@ class Result():
     self.opponent = opponent
     self.score = score
     self.league = league
+    self.match_time = match_time
 
   def __str__(self) -> str:
     """A string representation of the result.

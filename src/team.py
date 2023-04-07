@@ -40,14 +40,14 @@ class Team():
     # Add the game and its score.
     # Destructure the result
 
-    if (game.opponent, game.league) in self.history:
+    if (game.opponent, game.league, game.match_time) in self.history:
     # increase the score if we win
-      self.history[(game.opponent, game.league)] += game.score
+      self.history[(game.opponent, game.league, game.match_time)] += game.score
     else:
-      self.history[(game.opponent, game.league)] = game.score
+      self.history[(game.opponent, game.league, game.match_time)] = game.score
 
 
-  def get_score_against(self, opponent: str, league: str) -> None:
+  def get_score_against(self, opponent: str, league: str, match_time: str) -> None:
     """Get the score against opponent team.
 
       Get the score against opponent by looking up the team's history.
@@ -60,7 +60,7 @@ class Team():
         Result object that contains opponent's name
         and our result against them.
     """
-    return self.history[(opponent, league)]
+    return self.history[(opponent, league, match_time)]
 
 
   def __str__(self) -> str:

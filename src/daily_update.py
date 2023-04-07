@@ -61,8 +61,9 @@ class DailyUpdate():
       team2 = match_detail["Team2"]
       league = match_detail["Tournament"]
       result = match_detail["WinTeam"]
+      match_time = match_detail['DateTime UTC'].split(" ")[0]
 
-      data.append(Match(team1, team2, result, league))
+      data.append(Match(team1, team2, result, league, match_time))
 
     self.organize(data)
 
@@ -83,6 +84,7 @@ class DailyUpdate():
       team_2_name = match.team_2
       res = match.result
       league = match.league
+      match_time = match.match_time
 
       # create a new team if the team isn't in seen
       if team_1_name not in self.teams:
@@ -96,8 +98,8 @@ class DailyUpdate():
       # Results are relative
       # team 1 wins against team 2, so team 1 gets +1, but team 2 gets 0
       # that's why we need two different Result objects for the same match
-      team_1_result = Result(team_2_name, int(res == team_1_name), league)
-      team_2_result = Result(team_1_name, int(res == team_2_name), league)
+      team_1_result = Result(team_2_name, int(res == team_1_name), league, match_time)
+      team_2_result = Result(team_1_name, int(res == team_2_name), league, match_time)
 
       # Add the relative result to each team history
       self.teams[team_1_name].add_game(team_1_result)
@@ -159,20 +161,21 @@ class DailyUpdate():
 
     for team_name, team in self.teams.items():
       # Loop thru game history and append result to output
-      for enemy_name, enemy_league in team.history:
+      for enemy_name, enemy_league, match_time in team.history:
         # Breaking into different parts for readability
         league_name = team.league
         enemy = self.teams[enemy_name]
+        
 
-        home_score = team.get_score_against(enemy_name, enemy_league)
+        home_score = team.get_score_against(enemy_name, enemy_league, match_time)
 
-        opponent_score = enemy.get_score_against(team_name, enemy_league)
+        opponent_score = enemy.get_score_against(team_name, enemy_league, match_time)
 
         if league_name not in leagues:
           leagues[league_name] = [] # list of empty output
 
         output = (team_name, home_score, \
-                  opponent_score, enemy_name, enemy_league)
+                  opponent_score, enemy_name, enemy_league, match_time)
 
         leagues[league_name].append(output)
 
