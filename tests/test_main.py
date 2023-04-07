@@ -120,3 +120,78 @@ class TestInput():
     assert "LCS" in result.stdout
     assert "LPL" in result.stdout
     assert "query limit" in result.stdout
+    assert "No result found!" not in result.stdout
+
+
+  def test_single_team(self):
+    """Test a single team as input
+
+    Program should run and exit normally.
+    Table should only show the results for that team
+    title should be the league the team is playing in.
+    """
+    result = runner.invoke(app,
+                           ["2023-03-20", "--teams", "100 Thieves"])
+    assert result.exit_code == 0
+    assert "LCS" in result.stdout
+    assert "query limit" in result.stdout
+    assert "No result found!" not in result.stdout
+
+
+  def test_two_teams(self):
+    """Test two teams as input
+
+    Program should run and exit normally.
+    Table should only show the results for the two teams
+    title should be the league the teams are playing in.
+    """
+    result = runner.invoke(app,
+                          ["2023-03-20", "--teams", "100 Thieves",
+                          "--teams", "T1"])
+    assert result.exit_code == 0
+    assert "LCS" in result.stdout
+    assert "LCK" in result.stdout
+    assert "query limit" in result.stdout
+    assert "No result found!" not in result.stdout
+
+
+  def test_team_and_same_league(self):
+    """Test a team and the same league
+
+    This should run normally with only one table.
+    """
+    result = runner.invoke(app,
+                         ["2023-03-20", "--teams", "100 Thieves",
+                          "--league", "LCS"])
+    assert result.exit_code == 0
+    assert "LCS" in result.stdout
+    assert "League Daily" not in result.stdout
+    assert "No result found!" not in result.stdout
+    assert "query limit" in result.stdout
+
+
+  def test_team_and_diff_league(self):
+    """Test a team and a different league
+
+    This should run normally.
+    One table should only be for the given team
+    Other table will be for all team in given league.
+    """
+    result = runner.invoke(app,
+                          ["2023-03-20", "--teams", "100 Thieves",
+                          "--league", "LCK"])
+    assert result.exit_code == 0
+    assert "LCK" in result.stdout
+    assert "LCS" in result.stdout
+    assert "League Daily" not in result.stdout
+    assert "No result found!" not in result.stdout
+    assert "query limit" in result.stdout
+
+  def test_invalid_team(self):
+    """Test invalid team as input
+
+    Program should exit with error exit code
+    """
+    result = runner.invoke(app, ["2023-03-20", "--teams", "100 Theft"])
+    assert "League Daily" not in result.stdout
+    assert "No result found!" in result.stdout

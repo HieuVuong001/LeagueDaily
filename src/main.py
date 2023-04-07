@@ -66,7 +66,6 @@ def main(
 
     display.show_league_tables()
     display.warn(display.maximum_output_warning())
-    raise typer.Exit(0)
   
   if teams:
     team_query = generate_team_query(since, teams)
@@ -80,37 +79,36 @@ def main(
     
     display.show_league_tables()
     display.warn(display.maximum_output_warning())
-    raise typer.Exit(0)
 
+  if not teams and not league:
+    general_query = generate_general_query(since)
 
-  general_query = generate_general_query(since)
-
-  if since == DATE:
-    # Pull data and process
-    daily_update.get_data(general_query)
-    display.process_data(daily_update.get_info())
-
-    # Display table
-    display.show_master_table()
-    display.warn(display.maximum_output_warning())
-  else:
-    # Convert timezone to UTC and get current time
-    given_utc = since.astimezone(ZoneInfo("UTC"))
-    current_utc = datetime.now(timezone("UTC"))
-
-    # if given time > current time then abort
-    # else execute, but show output limit warning
-    if given_utc > current_utc:
-      display.warn("Invalid date! Abort!")
-      raise typer.Exit(1)
-    else:
-      # Pull and process data
+    if since == DATE:
+      # Pull data and process
       daily_update.get_data(general_query)
       display.process_data(daily_update.get_info())
 
-      # Display table and warning
+      # Display table
       display.show_master_table()
       display.warn(display.maximum_output_warning())
+    else:
+      # Convert timezone to UTC and get current time
+      given_utc = since.astimezone(ZoneInfo("UTC"))
+      current_utc = datetime.now(timezone("UTC"))
+
+      # if given time > current time then abort
+      # else execute, but show output limit warning
+      if given_utc > current_utc:
+        display.warn("Invalid date! Abort!")
+        raise typer.Exit(1)
+      else:
+        # Pull and process data
+        daily_update.get_data(general_query)
+        display.process_data(daily_update.get_info())
+
+        # Display table and warning
+        display.show_master_table()
+        display.warn(display.maximum_output_warning())
 
 
 if __name__ == "__main__":
