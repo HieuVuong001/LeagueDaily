@@ -6,20 +6,27 @@ class Match():
   """Match class to store data from API.
 
   Attributes:
-    team_1: First team's name.
-    team_2: Second team's name.
-    result: Result of the match - whether team 1 wins or team 2 wins.
+    team_1: first team's name.
+    team_2: second team's name.
+    result: result of the match - whether team 1 wins or team 2 wins.
     leauge: the league that this match belongs to.
-
+    match_time: time that the match occured.
   """
-  def __init__(self, team_1: str,
-              team_2: str,
-              result: str,
-              league: str,
-              match_time: str) -> None:
-    """Initializes the Match instance given 
-    both team's names, result, and league.
+  def __init__(
+    self,
+    team_1: str,
+    team_2: str,
+    result: str,
+    league: str,
+    match_time: str) -> None:
+    """Initializes the Match instance.
 
+    Args:
+      team_1: team 1 name
+      team_2: team 2 name
+      result: which team wins
+      league: the league that this match belongs.
+      match_time: when the match occured.
     """
     self.team_1 = team_1
     self.team_2 = team_2
