@@ -1,6 +1,6 @@
 # LeagueDaily
 
-Leauge of Legends Esports update straight from the terminal!
+League of Legends Esports update straight from the terminal!
 
 Now you can stay up-to-date with your favorite LoL teams/leagues despite your busy schedule.
 # Install
