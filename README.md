@@ -1,4 +1,4 @@
-# league-daily
+# LeagueDaily
 
 Leauge of Legends Esports update straight from the terminal!
 
@@ -14,22 +14,21 @@ requirement: `python3 >= 3.10`
 
 By default, `leaguedaily` without any arguments will show League of Legends Esports result from the previous day.
 
-<img width="638" alt="Screenshot 2023-04-19 at 8 00 06 PM" src="https://user-images.githubusercontent.com/60205090/233247146-f660c989-8cae-41a2-9360-0c60b13ee694.png">
+![Screenshot from 2023-04-20 07-43-17](https://user-images.githubusercontent.com/60205090/233401825-ff74f03d-7e29-4fc0-ad0c-9f1fb5639e72.png)
 
 You can also specify dates in the format of `YYYY-MM-DD` as an argument to the program.
 
-<img width="878" alt="Screenshot 2023-04-19 at 8 05 28 PM" src="https://user-images.githubusercontent.com/60205090/233247879-074f620d-b2fd-4a26-a836-3d853a5ad27b.png">
+![Screenshot from 2023-04-20 07-41-48](https://user-images.githubusercontent.com/60205090/233401471-2f539f98-7a97-4dcc-a5a1-5a292ff9d77d.png)
 
 
 `--team` flag can be used to specify one or more teams in addition to the given date argument.
 
-<img width="574" alt="Screenshot 2023-04-19 at 8 08 03 PM" src="https://user-images.githubusercontent.com/60205090/233248250-c9a32b79-53be-4f7c-9415-c57f6e85ade5.png">
-<img width="730" alt="Screenshot 2023-04-19 at 8 08 51 PM" src="https://user-images.githubusercontent.com/60205090/233248406-3f666713-be6b-4128-aaa3-855db1ef6a4d.png">
+![Screenshot from 2023-04-20 07-45-08](https://user-images.githubusercontent.com/60205090/233402355-e9d1c5ce-2a57-47a3-bfcd-23bf0bb4cf02.png)
+
 
 `--league` flag can be used to limit the results to only the given leagues.
 
-<img width="859" alt="Screenshot 2023-04-19 at 8 12 15 PM" src="https://user-images.githubusercontent.com/60205090/233248886-ce80d938-f530-43ad-b078-dc7331f52614.png">
-
+![Screenshot from 2023-04-20 07-46-33](https://user-images.githubusercontent.com/60205090/233402764-f5ec7044-8899-4bc1-a7c6-2b442acddb5d.png)
 
 # Known problems
 
@@ -37,5 +36,5 @@ You can also specify dates in the format of `YYYY-MM-DD` as an argument to the p
 2. A BO3 series could be in the same day in local time, but in UTC (default time when pulled from API), 2 matches are on the same day and 1 match is on the next day (past midnight UTC time, but still the same day local time). 
 
 Given the goal of this project (daily update for some busy fans), I decide not to address these problems. The program works consistently enough for what it is created for.
-SS
+
 Cheers! 🎆 
