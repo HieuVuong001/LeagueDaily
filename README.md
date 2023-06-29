@@ -7,8 +7,11 @@ Now you can stay up-to-date with your favorite LoL teams/leagues despite your bu
 
 requirement: `python3 >= 3.10`
 
-
 `pip install leaguedaily`
+
+Since this program is published as a PyPI package, you could start using it straight from the shell.
+
+If for some reason it doesn't work, try adding Python to PATH. Useful [guide](https://realpython.com/add-python-to-path/).
 
 # Usage
 
@@ -29,6 +32,10 @@ You can also specify dates in the format of `YYYY-MM-DD` as an argument to the p
 `--league` flag can be used to limit the results to only the given leagues.
 
 ![Screenshot from 2023-04-20 07-46-33](https://user-images.githubusercontent.com/60205090/233402764-f5ec7044-8899-4bc1-a7c6-2b442acddb5d.png)
+
+# Developement
+
+Before `main.py` can be run, run `export PYTHONPATH=$(pwd)` outside of the `src` folder. This helps python importing files from different folders in the project. 
 
 # Known problems
 
