@@ -12,7 +12,7 @@ requirement: `python3 >= 3.10`
 
 # Usage
 
-By default, `leaguedaily` without any arguments will show League of Legends Esports result from the previous day.
+By default, running `leaguedaily` without any arguments will show League of Legends Esports result from the previous day.
 
 ![Screenshot from 2023-04-20 07-43-17](https://user-images.githubusercontent.com/60205090/233401825-ff74f03d-7e29-4fc0-ad0c-9f1fb5639e72.png)
 
@@ -32,9 +32,10 @@ You can also specify dates in the format of `YYYY-MM-DD` as an argument to the p
 
 # Known problems
 
-1. Data is pulled from leaguepedia, so there is a limit as to how much data a normal user can pull. As a result, given a too-far-away-from-present date, program's result could be truncated or incorrect.
-2. A BO3 series could be in the same day in local time, but in UTC (default time when pulled from API), 2 matches are on the same day and 1 match is on the next day (past midnight UTC time, but still the same day local time). 
+1. Data is pulled from leaguepedia, so there is a limit as to how much data a normal user can pull. As a result, given a too far away date, program's result could be truncated, thus incorrect!
 
-Given the goal of this project (daily update for some busy fans), I decide not to address these problems. The program works consistently enough for what it is created for.
+2. A BO3 series could be in the same day in local time, but in UTC (default time when pulled from API), 2 matches are on the same day and 1 match is on the next day (past midnight UTC time, but still the same day local time). In short, if this happens, the result could appear incorrectly. However, the chance of this happening is rather rare (< 1% during development and testing).
+
+Since `leaguedaily` is created as a quick way to stay updated to *recent* LoL Esports News, these problems are not addressed. The program works consistently enough for what it is created for.
 
 Cheers! 🎆 
